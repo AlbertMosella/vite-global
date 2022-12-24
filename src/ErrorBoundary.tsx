@@ -2,6 +2,7 @@ import React, { type ErrorInfo, type PropsWithChildren } from 'react';
 
 type ErrorBoundaryState = {
   hasError: boolean;
+  error?: string;
 };
 
 export default class ErrorBoundary extends React.Component<PropsWithChildren, ErrorBoundaryState> {
@@ -12,7 +13,7 @@ export default class ErrorBoundary extends React.Component<PropsWithChildren, Er
 
   static getDerivedStateFromError(error: Error) {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true };
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -22,8 +23,7 @@ export default class ErrorBoundary extends React.Component<PropsWithChildren, Er
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
+      return <h1>{this.state.error ?? 'Something went wrong'}</h1>;
     }
 
     return this.props.children;
